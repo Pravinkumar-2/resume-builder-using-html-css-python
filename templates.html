@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeForge — Choose Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#0f0f0f; --paper:#faf8f4; --cream:#f0ece3;
+    --gold:#c9a84c; --gold-light:#e8d5a3; --slate:#4a4a5a; --muted:#9a9aaa;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+
+  /* TOP NAV */
+  nav {
+    background:#fff; padding:16px 40px; display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid #ebebeb; position:sticky; top:0; z-index:100;
+  }
+  .brand { font-family:'Playfair Display',serif; font-size:20px; }
+  .brand span { color:var(--gold); }
+  .back-btn {
+    display:flex; align-items:center; gap:6px; color:var(--slate); text-decoration:none;
+    font-size:14px; font-weight:500; transition:color 0.2s;
+  }
+  .back-btn:hover { color:var(--ink); }
+
+  /* HERO */
+  .hero {
+    text-align:center; padding:60px 40px 40px;
+    background:linear-gradient(180deg,#fff 0%,var(--paper) 100%);
+  }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:44px; line-height:1.1; margin-bottom:12px; }
+  .hero h1 em { font-style:normal; color:var(--gold); }
+  .hero p { color:var(--muted); font-size:16px; max-width:520px; margin:0 auto 32px; }
+
+  /* SEARCH + FILTERS */
+  .controls { max-width:900px; margin:0 auto 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .search-wrap { flex:1; position:relative; min-width:260px; }
+  .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px; }
+  .search-wrap input {
+    width:100%; padding:12px 16px 12px 42px;
+    border:1.5px solid #ddd; border-radius:50px; font-family:'DM Sans',sans-serif;
+    font-size:14px; background:#fff; outline:none; transition:all 0.2s;
+  }
+  .search-wrap input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,168,76,0.15); }
+  .cat-filters { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:0; }
+  .cat-btn {
+    padding:8px 18px; border-radius:20px; font-size:13px; font-weight:500;
+    cursor:pointer; border:1.5px solid #ddd; background:transparent; color:var(--slate);
+    transition:all 0.2s; font-family:'DM Sans',sans-serif;
+  }
+  .cat-btn.active, .cat-btn:hover { background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  /* TEMPLATE GRID */
+  .grid-wrap { max-width:1200px; margin:0 auto; padding:32px 40px 60px; }
+  .result-count { font-size:13px; color:var(--muted); margin-bottom:20px; }
+  .template-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:28px; }
+
+  .template-card {
+    background:#fff; border-radius:18px; overflow:hidden;
+    border:2px solid transparent; transition:all 0.3s; cursor:pointer;
+    box-shadow:0 2px 12px rgba(0,0,0,0.06);
+  }
+  .template-card:hover { border-color:var(--gold); transform:translateY(-6px); box-shadow:0 16px 48px rgba(0,0,0,0.12); }
+
+  .preview-area { height:220px; position:relative; overflow:hidden; }
+  .preview-overlay {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0); transition:background 0.25s; z-index:5;
+  }
+  .template-card:hover .preview-overlay { background:rgba(0,0,0,0.55); }
+  .use-btn {
+    opacity:0; transform:translateY(8px); background:var(--gold); color:var(--ink);
+    border:none; padding:11px 24px; border-radius:30px; font-weight:700; font-size:14px;
+    cursor:pointer; transition:all 0.25s; font-family:'DM Sans',sans-serif;
+  }
+  .template-card:hover .use-btn { opacity:1; transform:translateY(0); }
+  .use-btn:hover { transform:scale(1.05) !important; }
+
+  /* TEMPLATE PREVIEWS (inline SVG-like CSS art) */
+  .preview-area .inner { width:100%; height:100%; padding:16px; position:relative; }
+
+  /* Template 1 — Classic */
+  .tpl-classic { background:#fff; }
+  .tpl-classic .hdr { background:#1a237e; height:52px; display:flex; align-items:center; padding:0 14px; }
+  .tpl-classic .name-line { height:14px; width:60%; background:rgba(255,255,255,0.9); border-radius:3px; }
+  .tpl-classic .body-area { padding:12px 14px; }
+  .tpl-classic .section-title { height:6px; width:30%; background:#1a237e; border-radius:2px; margin-bottom:8px; margin-top:10px; }
+  .tpl-classic .line { height:5px; border-radius:2px; margin-bottom:5px; background:#e0e0e0; }
+
+  /* Template 2 — Modern Sidebar */
+  .tpl-sidebar { background:#f5f5f5; display:flex; }
+  .tpl-sidebar .side { width:38%; background:#263238; height:100%; padding:12px 10px; }
+  .tpl-sidebar .side-avatar { width:44px; height:44px; border-radius:50%; background:#80cbc4; margin:0 auto 10px; }
+  .tpl-sidebar .side-name { height:7px; background:rgba(255,255,255,0.8); border-radius:2px; margin-bottom:6px; }
+  .tpl-sidebar .side-line { height:4px; background:rgba(255,255,255,0.3); border-radius:2px; margin-bottom:4px; }
+  .tpl-sidebar .main-s { flex:1; padding:12px 10px; }
+  .tpl-sidebar .big-title { height:9px; width:70%; background:#263238; border-radius:2px; margin-bottom:8px; }
+  .tpl-sidebar .line { height:4px; border-radius:2px; margin-bottom:4px; background:#e0e0e0; }
+
+  /* Template 3 — Minimal */
+  .tpl-minimal { background:#fff; padding:18px; }
+  .tpl-minimal .m-name { height:16px; width:55%; background:#111; border-radius:2px; }
+  .tpl-minimal .m-title { height:6px; width:35%; background:#bbb; border-radius:2px; margin:6px 0 12px; }
+  .tpl-minimal .m-divider { height:1px; background:#eee; margin-bottom:10px; }
+  .tpl-minimal .m-sh { height:5px; width:25%; background:#111; border-radius:2px; margin-bottom:6px; }
+  .tpl-minimal .m-line { height:4px; border-radius:2px; margin-bottom:4px; background:#e8e8e8; }
+
+  /* Template 4 — Creative */
+  .tpl-creative { background:linear-gradient(135deg,#ff6b6b,#ee5a24); display:flex; align-items:flex-start; padding:16px; }
+  .tpl-creative .cr-left { width:40%; }
+  .tpl-creative .cr-name { height:10px; width:80%; background:rgba(255,255,255,0.95); border-radius:2px; margin-bottom:5px; }
+  .tpl-creative .cr-role { height:6px; width:60%; background:rgba(255,255,255,0.6); border-radius:2px; margin-bottom:12px; }
+  .tpl-creative .cr-right { flex:1; background:rgba(255,255,255,0.95); border-radius:10px; padding:10px; margin-left:12px; margin-top:0; }
+  .tpl-creative .cr-line { height:4px; border-radius:2px; margin-bottom:4px; background:#ddd; }
+
+  /* Template 5 — Executive */
+  .tpl-executive { background:#fff; }
+  .tpl-executive .ex-top { background:#b8860b; padding:14px; text-align:center; }
+  .tpl-executive .ex-name { height:12px; width:50%; background:rgba(255,255,255,0.95); border-radius:2px; margin:0 auto 6px; }
+  .tpl-executive .ex-role { height:6px; width:35%; background:rgba(255,255,255,0.6); border-radius:2px; margin:0 auto; }
+  .tpl-executive .ex-body { padding:12px; display:flex; gap:10px; }
+  .tpl-executive .ex-col { flex:1; }
+  .tpl-executive .ex-line { height:4px; border-radius:2px; margin-bottom:5px; background:#e0e0e0; }
+  .tpl-executive .ex-head { height:6px; width:40%; background:#b8860b; border-radius:2px; margin-bottom:7px; }
+
+  /* Template 6 — ATS Clean */
+  .tpl-ats { background:#fff; padding:16px; }
+  .tpl-ats .at-name { height:12px; width:60%; background:#333; border-radius:2px; margin-bottom:4px; }
+  .tpl-ats .at-contact { height:4px; width:80%; background:#aaa; border-radius:2px; margin-bottom:12px; }
+  .tpl-ats .at-div { height:2px; background:#333; margin-bottom:8px; }
+  .tpl-ats .at-sh { height:6px; width:30%; background:#333; border-radius:2px; margin-bottom:6px; }
+  .tpl-ats .at-line { height:4px; border-radius:2px; margin-bottom:4px; background:#ddd; }
+
+  /* Template 7 — Tech/Dev */
+  .tpl-tech { background:#0d1117; padding:16px; }
+  .tpl-tech .tc-name { height:11px; width:55%; background:#58a6ff; border-radius:2px; margin-bottom:5px; }
+  .tpl-tech .tc-role { height:5px; width:40%; background:#3fb950; border-radius:2px; margin-bottom:12px; }
+  .tpl-tech .tc-badge { display:inline-block; height:14px; border-radius:10px; margin-right:4px; margin-bottom:6px; }
+  .tpl-tech .tc-sh { height:5px; width:30%; background:#58a6ff; border-radius:2px; margin-bottom:5px; margin-top:8px; }
+  .tpl-tech .tc-line { height:4px; border-radius:2px; margin-bottom:4px; background:#21262d; }
+
+  /* Template 8 — Elegant */
+  .tpl-elegant { background:#fdf6e3; padding:0; }
+  .tpl-elegant .el-border { border-left:4px solid #8b6914; height:100%; padding:16px; }
+  .tpl-elegant .el-name { height:14px; width:60%; background:#5c4008; border-radius:2px; margin-bottom:5px; }
+  .tpl-elegant .el-role { height:5px; width:40%; background:#c9a84c; border-radius:2px; margin-bottom:12px; }
+  .tpl-elegant .el-sh { height:5px; width:30%; background:#8b6914; border-radius:2px; margin-bottom:5px; margin-top:8px; }
+  .tpl-elegant .el-line { height:4px; border-radius:2px; margin-bottom:4px; background:#e8d9b5; }
+
+  /* Template 9 — Bold */
+  .tpl-bold { background:#fff; }
+  .tpl-bold .bl-strip { height:8px; background:linear-gradient(90deg,#e91e63,#9c27b0,#3f51b5); }
+  .tpl-bold .bl-body { padding:14px; }
+  .tpl-bold .bl-name { height:16px; width:65%; background:#111; border-radius:2px; margin-bottom:5px; }
+  .tpl-bold .bl-role { height:7px; width:40%; background:linear-gradient(90deg,#e91e63,#9c27b0); border-radius:2px; margin-bottom:12px; }
+  .tpl-bold .bl-sh { height:6px; width:30%; background:#111; border-radius:2px; margin-bottom:5px; margin-top:8px; }
+  .tpl-bold .bl-line { height:4px; border-radius:2px; margin-bottom:4px; background:#eee; }
+
+  /* Template 10 — Infographic */
+  .tpl-info { background:#eceff1; display:flex; }
+  .tpl-info .inf-left { width:42%; background:#37474f; padding:14px; }
+  .tpl-info .inf-circle { width:42px; height:42px; border-radius:50%; background:#80deea; margin:0 auto 8px; }
+  .tpl-info .inf-lname { height:7px; background:rgba(255,255,255,0.8); border-radius:2px; margin-bottom:5px; }
+  .tpl-info .inf-skill { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
+  .tpl-info .inf-skill-label { height:4px; width:30%; background:rgba(255,255,255,0.5); border-radius:2px; }
+  .tpl-info .inf-skill-bar { height:4px; border-radius:2px; background:#80deea; }
+  .tpl-info .inf-right { flex:1; padding:12px; }
+  .tpl-info .inf-sh { height:5px; width:35%; background:#37474f; border-radius:2px; margin-bottom:5px; margin-top:6px; }
+  .tpl-info .inf-line { height:4px; border-radius:2px; margin-bottom:4px; background:#cfd8dc; }
+
+  /* Template 11 — Pastel */
+  .tpl-pastel { background:#fff0f3; padding:16px; }
+  .tpl-pastel .ps-name { height:13px; width:58%; background:#c2185b; border-radius:2px; margin-bottom:4px; }
+  .tpl-pastel .ps-role { height:5px; width:38%; background:#f48fb1; border-radius:2px; margin-bottom:10px; }
+  .tpl-pastel .ps-dots { display:flex; gap:6px; margin-bottom:10px; }
+  .tpl-pastel .ps-dot { width:6px; height:6px; border-radius:50%; background:#f06292; }
+  .tpl-pastel .ps-sh { height:5px; width:30%; background:#c2185b; border-radius:2px; margin-bottom:5px; margin-top:6px; }
+  .tpl-pastel .ps-line { height:4px; border-radius:2px; margin-bottom:4px; background:#fce4ec; }
+
+  /* Template 12 — Nature */
+  .tpl-nature { background:#f1f8e9; }
+  .tpl-nature .na-top { background:#558b2f; padding:14px; }
+  .tpl-nature .na-name { height:11px; width:55%; background:rgba(255,255,255,0.9); border-radius:2px; margin-bottom:5px; }
+  .tpl-nature .na-role { height:5px; width:38%; background:rgba(255,255,255,0.6); border-radius:2px; }
+  .tpl-nature .na-body { padding:12px; }
+  .tpl-nature .na-sh { height:5px; width:30%; background:#558b2f; border-radius:2px; margin-bottom:5px; margin-top:6px; }
+  .tpl-nature .na-line { height:4px; border-radius:2px; margin-bottom:4px; background:#dcedc8; }
+
+  /* Card meta */
+  .card-meta { padding:16px 18px; border-top:1px solid #f0f0f0; }
+  .card-top-row { display:flex; align-items:center; justify-content:space-between; }
+  .card-name { font-weight:700; font-size:15px; color:var(--ink); }
+  .cat-tag {
+    display:inline-block; padding:3px 10px; border-radius:20px;
+    font-size:11px; font-weight:600;
+  }
+  .tag-professional { background:#e3f2fd; color:#1565c0; }
+  .tag-student { background:#e8f5e9; color:#2e7d32; }
+  .tag-creative { background:#f3e5f5; color:#6a1b9a; }
+  .tag-ats { background:#fff8e1; color:#e65100; }
+  .tag-tech { background:#e8eaf6; color:#283593; }
+  .card-desc { font-size:12px; color:var(--muted); margin-top:5px; }
+
+  /* Loading state */
+  .loading-overlay {
+    position:fixed; inset:0; background:rgba(255,255,255,0.9);
+    display:none; align-items:center; justify-content:center;
+    flex-direction:column; gap:16px; z-index:999;
+  }
+  .loading-overlay.show { display:flex; }
+  .spinner {
+    width:40px; height:40px; border:3px solid var(--cream);
+    border-top-color:var(--gold); border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
+  .template-card { animation:fadeUp 0.4s ease both; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="index.html">Resume<span>Forge</span></a>
+  <a class="back-btn" href="index.html">← Back to Dashboard</a>
+</nav>
+
+<div class="hero">
+  <h1>Choose Your <em>Perfect</em> Template</h1>
+  <p>12 professionally designed templates for every career stage and industry. Pick one to get started instantly.</p>
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by name or category…" oninput="filterTemplates()">
+    </div>
+  </div>
+  <div class="cat-filters">
+    <button class="cat-btn active" onclick="setCategory('all',this)">✦ All</button>
+    <button class="cat-btn" onclick="setCategory('Professional',this)">Professional</button>
+    <button class="cat-btn" onclick="setCategory('Student',this)">Student</button>
+    <button class="cat-btn" onclick="setCategory('Creative',this)">Creative</button>
+    <button class="cat-btn" onclick="setCategory('ATS',this)">ATS Friendly</button>
+    <button class="cat-btn" onclick="setCategory('Tech',this)">Tech/Dev</button>
+  </div>
+</div>
+
+<div class="grid-wrap">
+  <p class="result-count" id="resultCount"></p>
+  <div class="template-grid" id="templateGrid"></div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p style="font-weight:600;color:var(--slate)">Setting up your resume…</p>
+</div>
+
+<script>
+const templates = [
+  { id:'tpl1', name:'Classic Blue', category:'Professional', desc:'Timeless header with a bold navy bar. Great for corporate roles.', preview:'tpl-classic', tagClass:'tag-professional' },
+  { id:'tpl2', name:'Modern Sidebar', category:'Professional', desc:'Two-column layout with a dark sidebar for contact & skills.', preview:'tpl-sidebar', tagClass:'tag-professional' },
+  { id:'tpl3', name:'Minimal White', category:'Student', desc:'Clean, spacious layout. Lets your content breathe.', preview:'tpl-minimal', tagClass:'tag-student' },
+  { id:'tpl4', name:'Creative Pop', category:'Creative', desc:'Bold gradient header with a vibrant card layout.', preview:'tpl-creative', tagClass:'tag-creative' },
+  { id:'tpl5', name:'Executive Gold', category:'Professional', desc:'Premium gold header for senior professionals.', preview:'tpl-executive', tagClass:'tag-professional' },
+  { id:'tpl6', name:'ATS Classic', category:'ATS', desc:'Plain text optimized. Passes all applicant tracking systems.', preview:'tpl-ats', tagClass:'tag-ats' },
+  { id:'tpl7', name:'Dev Dark', category:'Tech', desc:'Dark mode layout perfect for engineers & developers.', preview:'tpl-tech', tagClass:'tag-tech' },
+  { id:'tpl8', name:'Elegant Serif', category:'Student', desc:'Warm cream tones with serif typography for a refined look.', preview:'tpl-elegant', tagClass:'tag-student' },
+  { id:'tpl9', name:'Bold Gradient', category:'Creative', desc:'Rainbow gradient stripe with high-contrast typography.', preview:'tpl-bold', tagClass:'tag-creative' },
+  { id:'tpl10', name:'Infographic', category:'Creative', desc:'Skill bars and circular avatar for visual impact.', preview:'tpl-info', tagClass:'tag-creative' },
+  { id:'tpl11', name:'Soft Blush', category:'Student', desc:'Gentle pink palette. Elegant and approachable.', preview:'tpl-pastel', tagClass:'tag-student' },
+  { id:'tpl12', name:'Nature Fresh', category:'Student', desc:'Earthy greens for a fresh, organic feel.', preview:'tpl-nature', tagClass:'tag-student' },
+];
+
+function previewHTML(t) {
+  const cls = t.preview;
+  if(cls==='tpl-classic') return `<div class="${cls}" style="height:100%"><div class="hdr"><div class="name-line"></div></div><div class="body-area"><div class="section-title"></div><div class="line"></div><div class="line" style="width:85%"></div><div class="line" style="width:90%"></div><div class="section-title"></div><div class="line"></div><div class="line" style="width:75%"></div></div></div>`;
+  if(cls==='tpl-sidebar') return `<div class="${cls}" style="height:100%"><div class="side"><div class="side-avatar"></div><div class="side-name"></div><div class="side-line"></div><div class="side-line" style="width:70%"></div><div class="side-line" style="width:80%"></div><div class="side-line" style="width:60%"></div><div style="height:1px;background:rgba(255,255,255,0.15);margin:8px 0"></div><div class="side-line"></div><div class="side-line" style="width:70%"></div></div><div class="main-s"><div class="big-title"></div><div class="line"></div><div class="line" style="width:90%"></div><div class="line" style="width:85%"></div><div style="height:8px"></div><div class="line"></div><div class="line" style="width:80%"></div></div></div>`;
+  if(cls==='tpl-minimal') return `<div class="${cls}"><div class="m-name"></div><div class="m-title"></div><div class="m-divider"></div><div class="m-sh"></div><div class="m-line"></div><div class="m-line" style="width:85%"></div><div class="m-line" style="width:90%"></div><div class="m-sh" style="margin-top:12px"></div><div class="m-line"></div><div class="m-line" style="width:78%"></div></div>`;
+  if(cls==='tpl-creative') return `<div class="${cls}" style="height:100%"><div class="cr-left"><div class="cr-name"></div><div class="cr-role"></div><div style="display:flex;flex-wrap:wrap;gap:4px">${['#fff3','#fff3','#fff3'].map(b=>`<div style="height:12px;width:36px;border-radius:10px;background:${b}"></div>`).join('')}</div></div><div class="cr-right"><div class="cr-line"></div><div class="cr-line" style="width:85%"></div><div class="cr-line" style="width:90%"></div><div style="height:6px"></div><div class="cr-line" style="width:70%"></div><div class="cr-line" style="width:80%"></div></div></div>`;
+  if(cls==='tpl-executive') return `<div class="${cls}" style="height:100%"><div class="ex-top"><div class="ex-name"></div><div class="ex-role"></div></div><div class="ex-body"><div class="ex-col"><div class="ex-head"></div><div class="ex-line"></div><div class="ex-line" style="width:85%"></div><div class="ex-line" style="width:70%"></div></div><div class="ex-col"><div class="ex-head"></div><div class="ex-line"></div><div class="ex-line" style="width:80%"></div><div class="ex-line" style="width:60%"></div></div></div></div>`;
+  if(cls==='tpl-ats') return `<div class="${cls}"><div class="at-name"></div><div class="at-contact"></div><div class="at-div"></div><div class="at-sh"></div><div class="at-line"></div><div class="at-line" style="width:85%"></div><div class="at-div" style="margin-top:10px"></div><div class="at-sh"></div><div class="at-line"></div><div class="at-line" style="width:78%"></div></div>`;
+  if(cls==='tpl-tech') return `<div class="${cls}" style="height:100%"><div class="tc-name"></div><div class="tc-role"></div><div style="display:flex;flex-wrap:wrap">${[40,52,36,48].map(w=>`<div class="tc-badge" style="width:${w}px;background:#58a6ff22"></div>`).join('')}</div><div class="tc-sh"></div><div class="tc-line"></div><div class="tc-line" style="width:80%;background:#21262d"></div><div class="tc-sh" style="margin-top:8px"></div><div class="tc-line"></div><div class="tc-line" style="width:85%"></div></div>`;
+  if(cls==='tpl-elegant') return `<div class="${cls}" style="height:100%"><div class="el-border"><div class="el-name"></div><div class="el-role"></div><div style="height:1px;background:#c9a84c;margin-bottom:8px"></div><div class="el-sh"></div><div class="el-line"></div><div class="el-line" style="width:85%"></div><div class="el-sh" style="margin-top:10px"></div><div class="el-line"></div><div class="el-line" style="width:78%"></div></div></div>`;
+  if(cls==='tpl-bold') return `<div class="${cls}" style="height:100%"><div class="bl-strip"></div><div class="bl-body"><div class="bl-name"></div><div class="bl-role"></div><div class="bl-sh"></div><div class="bl-line"></div><div class="bl-line" style="width:85%"></div><div class="bl-sh" style="margin-top:8px"></div><div class="bl-line"></div><div class="bl-line" style="width:72%"></div></div></div>`;
+  if(cls==='tpl-info') return `<div class="${cls}" style="height:100%"><div class="inf-left"><div class="inf-circle"></div><div class="inf-lname"></div><div class="inf-lname" style="width:60%;background:rgba(255,255,255,0.5)"></div><div style="height:8px"></div>${[70,55,80,45].map(w=>`<div class="inf-skill"><div class="inf-skill-label"></div><div class="inf-skill-bar" style="width:${w}%"></div></div>`).join('')}</div><div class="inf-right"><div class="inf-sh"></div><div class="inf-line"></div><div class="inf-line" style="width:85%"></div><div class="inf-sh"></div><div class="inf-line"></div><div class="inf-line" style="width:78%"></div></div></div>`;
+  if(cls==='tpl-pastel') return `<div class="${cls}"><div class="ps-name"></div><div class="ps-role"></div><div class="ps-dots">${[1,2,3].map(()=>'<div class="ps-dot"></div>').join('')}</div><div class="ps-sh"></div><div class="ps-line"></div><div class="ps-line" style="width:85%"></div><div class="ps-sh" style="margin-top:8px"></div><div class="ps-line"></div><div class="ps-line" style="width:75%"></div></div>`;
+  if(cls==='tpl-nature') return `<div class="${cls}" style="height:100%"><div class="na-top"><div class="na-name"></div><div class="na-role"></div></div><div class="na-body"><div class="na-sh"></div><div class="na-line"></div><div class="na-line" style="width:85%"></div><div class="na-line" style="width:90%"></div><div class="na-sh" style="margin-top:8px"></div><div class="na-line"></div><div class="na-line" style="width:78%"></div></div></div>`;
+  return '<div></div>';
+}
+
+let activeCategory = 'all';
+
+function setCategory(cat, el) {
+  activeCategory = cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  filterTemplates();
+}
+
+function filterTemplates() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = templates.filter(t => {
+    const matchCat = activeCategory==='all' || t.category===activeCategory;
+    const matchQ = !q || t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  renderGrid(filtered);
+  document.getElementById('resultCount').textContent = `Showing ${filtered.length} template${filtered.length!==1?'s':''}`;
+}
+
+function renderGrid(list) {
+  const grid = document.getElementById('templateGrid');
+  if(list.length===0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)">
+      <div style="font-size:48px">🔍</div>
+      <p style="margin-top:12px;font-size:16px">No templates match your search.</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = list.map((t,i) => `
+    <div class="template-card" style="animation-delay:${i*0.05}s">
+      <div class="preview-area">
+        <div style="height:100%">${previewHTML(t)}</div>
+        <div class="preview-overlay">
+          <button class="use-btn" onclick="useTemplate('${t.id}','${t.name}','${t.category}')">Use Template →</button>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-top-row">
+          <span class="card-name">${t.name}</span>
+          <span class="cat-tag ${t.tagClass}">${t.category}</span>
+        </div>
+        <p class="card-desc">${t.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function useTemplate(id, name, category) {
+  document.getElementById('loadingOverlay').classList.add('show');
+  const resume = {
+    id: 'res_' + Date.now(),
+    templateId: id,
+    templateName: name,
+    category: category,
+    name: 'Untitled Resume',
+    updated: new Date().toISOString(),
+    content: {}
+  };
+  // Save locally (replace with API call)
+  const resumes = JSON.parse(localStorage.getItem('resumes')||'[]');
+  resumes.push(resume);
+  localStorage.setItem('resumes', JSON.stringify(resumes));
+  localStorage.setItem('currentResumeId', resume.id);
+  localStorage.setItem('currentTemplate', JSON.stringify({id, name, category}));
+  // Simulated API call
+  setTimeout(() => {
+    window.location.href = 'editor.html';
+  }, 900);
+}
+
+filterTemplates();
+</script>
+</body>
+</html>
